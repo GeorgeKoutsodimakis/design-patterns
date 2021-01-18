@@ -1,70 +1,32 @@
 package com.example.designpatterns
 
-open class Rifleman : Infantry {
-    override fun move(x: Long, y: Long) {
-        // Move at its own pace
-    }
-
-
-    override fun attack(x: Long, y: Long) {
-        //shoot
-    }
+open class Rifleman(initialMagazine: Int = 3) : InfantryUnit {
+    private val magazines = List<Magazine>(initialMagazine) { Magazine(5) }
+    override fun bulletsLeft(): Int = magazines.sumBy { it.bulletsLeft() }
 }
 
 
-open class RocketSoldier : Infantry {
-    override fun move(x: Long, y: Long) {
-        //move
-    }
+open class Sniper(intialBullets: Int = 50) : InfantryUnit {
+    private val bullets = List(intialBullets) { Bullet() }
+    override fun bulletsLeft(): Int = bullets.size
 
-    override fun attack(x: Long, y: Long) {
-        //attack
-    }
 
 }
 
-open class Grenadier : Infantry {
-    override fun move(x: Long, y: Long) {
-        //moves slowly grenades are heavy
+class Squad(private val units: MutableList<InfantryUnit> = mutableListOf()) : CanCountBullets {
+    constructor(vararg units: InfantryUnit) : this(mutableListOf()) {
+        for (unit in units) {
+            this.units.add(unit)
+        }
     }
 
-    override fun attack(x: Long, y: Long) {
-        //throw grenades
-    }
+    override fun bulletsLeft(): Int = units.sumBy { it.bulletsLeft() }
 }
 
-class UpgradedRifleMan : Rifleman() {
-    override fun attack(x: Long, y: Long) {
-        //Shoots twice as fast
-    }
-}
 
-class UpgradedGrenadier : Grenadier() {
-    override fun attack(x: Long, y: Long) {
-        //throw multiple grenades
-    }
-}
+class Bullet
 
-class LightRifleman : Rifleman() {
-    override fun move(x: Long, y: Long) {
-        //running faster
-    }
-}
-
-class LightGrenadier:Grenadier(){
-    override fun move(x: Long, y: Long) {
-        //faster movement
-    }
-}
-
-class Soldier( val weapon:Weapon,  val legs:Legs, val name:String):Infantry{
-    override fun move(x: Long, y: Long) {
-        legs.move()
-
-    }
-
-    override fun attack(x: Long, y: Long) {
-        weapon.causeDamage()
-    }
-
+class Magazine(capacity: Int) : CanCountBullets {
+    private val bullets = List(capacity) { Bullet() }
+    override fun bulletsLeft(): Int = bullets.size
 }
