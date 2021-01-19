@@ -9,7 +9,7 @@ class TransitionSnail {
     )
 
 
-    fun git getCurrentSprite(sprites: List<java.io.File>): java.io.File {
+    fun getCurrentSprite(sprites: List<java.io.File>): java.io.File {
         return when (directionFacing) {
             Direction.LEFT -> sprites[0]
             Direction.RIGHT -> sprites[1]
